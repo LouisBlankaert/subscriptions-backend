@@ -1,7 +1,5 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from werkzeug.middleware.dispatcher import DispatcherMiddleware
-import os
 
 app = Flask(__name__)
 CORS(app)
@@ -42,8 +40,6 @@ def delete_subscription(subscription_id):
     subscriptions = [s for s in subscriptions if s["id"] != subscription_id]
     return jsonify({"message": "Subscription deleted!"})
 
-# Adapter pour Vercel (serverless)
-def handler(environ, start_response):
-    from werkzeug.wsgi import DispatcherMiddleware
-    application = DispatcherMiddleware(app)
-    return application(environ, start_response)
+# Lancer l'application avec Gunicorn pour Vercel
+if __name__ == "__main__":
+    app.run()
