@@ -1,6 +1,6 @@
-import requests
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
 
 app = Flask(__name__)
 CORS(app)
@@ -41,5 +41,11 @@ def delete_subscription(subscription_id):
     subscriptions = [s for s in subscriptions if s["id"] != subscription_id]
     return jsonify({"message": "Subscription deleted!"})
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# Adapter pour Vercel (serverless)
+def handler(environ, start_response):
+    from werkzeug.wsgi import DispatcherMiddleware
+    application = DispatcherMiddleware(app)
+    return application(environ, start_response)
+
+# Le code principal reste inchangé. 
+# Flask sera utilisé en mode serverless sur Vercel sans SharedDataMiddleware.
