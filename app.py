@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, redirect
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -12,6 +12,11 @@ def get_logo_url(name):
     base_url = "https://logo.clearbit.com/"
     domain = f"{name.lower()}.com"  # Génère un domaine approximatif
     return f"{base_url}{domain}"
+
+# Redirection de la racine vers /subscriptions
+@app.route('/')
+def home():
+    return redirect('/subscriptions')
 
 # Récupérer tous les abonnements
 @app.route('/subscriptions', methods=['GET'])
@@ -40,6 +45,5 @@ def delete_subscription(subscription_id):
     subscriptions = [s for s in subscriptions if s["id"] != subscription_id]
     return jsonify({"message": "Subscription deleted!"})
 
-# Lancer l'application avec Gunicorn pour Vercel
-if __name__ == "__main__":
-    app.run()
+if __name__ == '__main__':
+    app.run(debug=True)
