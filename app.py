@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -46,6 +47,3 @@ def handler(environ, start_response):
     from werkzeug.wsgi import DispatcherMiddleware
     application = DispatcherMiddleware(app)
     return application(environ, start_response)
-
-# Le code principal reste inchangé. 
-# Flask sera utilisé en mode serverless sur Vercel sans SharedDataMiddleware.
